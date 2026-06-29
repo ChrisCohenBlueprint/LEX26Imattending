@@ -5,8 +5,7 @@
     const zoomSlider = document.getElementById('zoom-slider');
     
     // Text Inputs
-    const nameInput = document.getElementById('name-input');
-    const companyInput = document.getElementById('company-input');
+    const boothInput = document.getElementById('booth-input');
     
     const downloadBtn = document.getElementById('download-btn');
     const linkedinBtn = document.getElementById('linkedin-btn');
@@ -24,16 +23,15 @@
     let userImage = null, userImgX = 0, userImgY = 0, userImgScale = 1;
     let isDragging = false, startX, startY;
 
-    // Portrait HD Canvas Resolution standard
-    canvas.width = 800; 
-    canvas.height = 1000;
+    // Landscape Canvas Resolution standard
+    canvas.width = 1024; 
+    canvas.height = 535;
 
     frameImage.crossOrigin = "anonymous";
     frameImage.src = FRAME_PATH;
     frameImage.onload = () => render();
 
-    nameInput.oninput = () => render();
-    companyInput.oninput = () => render();
+    boothInput.oninput = () => render();
 
     function render() {
         // ALWAYS start the frame layout with a fresh structural state reset
@@ -46,63 +44,40 @@
         ctx.fillStyle = "#ffffff"; 
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // 2. Map Profile Avatar Masking Window Hole
-        if (userImage) {
-            ctx.save();
-            
-            const circleX = 400; 
-            const circleY = 620; 
-            const radius = 265;  
-            
-            ctx.beginPath(); 
-            ctx.arc(circleX, circleY, radius, 0, Math.PI * 2); 
-            ctx.clip();
-            
-            const dw = userImage.width * userImgScale;
-            const dh = userImage.height * userImgScale;
-            
-            ctx.drawImage(userImage, circleX + userImgX - dw / 2, circleY + userImgY - dh / 2, dw, dh);
-            ctx.restore(); // Clears out the image mask clipping limits safely
-        }
-
-        // 3. Render Overlay Frame Template
+        // 2. Render Overlay Frame Template BEFORE User Image
         if (frameImage.complete && frameImage.naturalWidth !== 0) {
             ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
         }
 
-        // 4. Render Dynamic Inline Bottom Line Strings with Auto-Spacing
-        let regularText = nameInput.value.trim() ? nameInput.value : "Your Name, Title, ";
-        const boldText = companyInput.value.trim() ? companyInput.value : "Company Name";
-
-        if (regularText.length > 0 && !regularText.endsWith(' ')) {
-            regularText = regularText + ' ';
+        // 3. Render User Image Logo (free floating)
+        if (userImage) {
+            ctx.save();
+            const dw = userImage.width * userImgScale;
+            const dh = userImage.height * userImgScale;
+            
+            // Default center around the white area on the right (approx X:750, Y:250)
+            const imgCenterX = 750 + userImgX;
+            const imgCenterY = 250 + userImgY;
+            
+            ctx.drawImage(userImage, imgCenterX - dw / 2, imgCenterY - dh / 2, dw, dh);
+            ctx.restore();
         }
 
-        const fontSize = "24px";
-        const fontName = "'NeueHaasGrotesk', 'Inter', sans-serif";
+        // 4. Render Stand Number Text
+        const boothText = boothInput.value.trim() ? boothInput.value : "";
+        if (boothText) {
+            const fontSize = "34px";
+            const fontName = "'NeueHaasGrotesk', 'Inter', sans-serif";
+            
+            const textCenterX = 702;
+            const textBaselineY = 440; 
 
-        // Light Text Fragment (Weight 300)
-        ctx.font = `300 ${fontSize} ${fontName}`;
-        const regularWidth = ctx.measureText(regularText).width;
-
-        // Medium Text Fragment (Weight 500)
-        ctx.font = `500 ${fontSize} ${fontName}`;
-        const boldWidth = ctx.measureText(boldText).width;
-
-        const totalWidth = regularWidth + boldWidth;
-        
-        let currentX = (canvas.width - totalWidth) / 2;
-        const textBaselineY = 910; 
-
-        ctx.fillStyle = "#ffffff";
-        ctx.font = `300 ${fontSize} ${fontName}`;
-        ctx.textBaseline = "middle";
-        ctx.textAlign = "left";
-        ctx.fillText(regularText, currentX, textBaselineY);
-
-        currentX += regularWidth;
-        ctx.font = `500 ${fontSize} ${fontName}`;
-        ctx.fillText(boldText, currentX, textBaselineY);
+            ctx.fillStyle = "#162842"; // Dark blue text color
+            ctx.font = `800 ${fontSize} ${fontName}`;
+            ctx.textBaseline = "middle";
+            ctx.textAlign = "center";
+            ctx.fillText(boothText, textCenterX, textBaselineY);
+        }
     }
 
     document.getElementById('drop-zone').onclick = (e) => {
@@ -156,7 +131,7 @@
     downloadBtn.onclick = (e) => {
         e.stopPropagation();
         const link = document.createElement('a');
-        link.download = 'lex26-speaker-badge.png';
+        link.download = 'lex26-exhibitor-badge.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
     };
@@ -165,7 +140,7 @@
         e.stopPropagation();
         downloadBtn.click(); 
         
-        const shareText = `So excited for #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n320+ Exhibitors\n100+ Speakers\nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
+        const shareText = `We are so excited to exhibit at #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n320+ Exhibitors\n100+ Speakers\nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
         
         navigator.clipboard.writeText(shareText).then(() => {
             customModal.classList.add('active');
@@ -183,8 +158,8 @@
         e.stopPropagation();
         downloadBtn.click(); 
         
-        const emailBody = `So excited for #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n320+ Exhibitors\n100+ Speakers\nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
-        window.location.href = `mailto:?subject=I'm speaking at Lubricant Expo Europe 2026!&body=${encodeURIComponent(emailBody)}`; 
+        const emailBody = `We are so excited to exhibit at #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n320+ Exhibitors\n100+ Speakers\nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
+        window.location.href = `mailto:?subject=We are exhibiting at Lubricant Expo Europe 2026!&body=${encodeURIComponent(emailBody)}`; 
     };
     
     resetBtn.onclick = (e) => { e.stopPropagation(); location.reload(); };

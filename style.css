@@ -150,8 +150,8 @@ body {
 
 .drop-zone {
     width: 100%;
-    max-width: 440px; 
-    aspect-ratio: 800 / 1000; 
+    max-width: 600px; 
+    aspect-ratio: 1024 / 535; 
     position: relative;
     cursor: pointer;
     border-radius: 16px; 
