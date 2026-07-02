@@ -97,7 +97,7 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
     gap: 20px; 
 }
 
@@ -182,8 +182,8 @@ canvas {
    ========================================================================== */
 .placeholder {
     position: absolute;
-    top: 62%; 
-    left: 50%;
+    top: 32%; 
+    left: 83%;
     transform: translate(-50%, -50%);
     width: 200px;
     height: 200px;
@@ -195,12 +195,11 @@ canvas {
     transition: opacity 0.2s ease;
     text-align: center;
     pointer-events: none;
-    background: rgba(10, 12, 16, 0.75); 
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
     padding: 20px;
+}
+
+.drop-zone:hover .placeholder {
+    transform: translate(-50%, -50%) scale(1.05);
 }
 
 .upload-icon {
@@ -249,6 +248,68 @@ canvas {
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+/* Style Switcher */
+.style-switcher {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.style-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 12px 10px;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: left;
+}
+
+.style-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-main);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.style-btn.active {
+    background: rgba(0, 153, 218, 0.15);
+    border-color: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 153, 218, 0.25);
+}
+
+.style-icon {
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.style-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.style-text strong {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.style-text span {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+}
+
+.style-btn.active .style-text span {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .text-field {
