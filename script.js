@@ -23,14 +23,18 @@
     let isDragging = false, startX, startY;
 
     // Landscape Canvas Resolution standard
-    canvas.width = 1024; 
-    canvas.height = 535;
+    canvas.width = 1200; 
+    canvas.height = 627;
 
     frameImage.crossOrigin = "anonymous";
     frameImage.src = FRAME_PATH_CURRENT;
     frameImage.onload = () => render();
 
     const dropZone = document.getElementById('drop-zone');
+    dropZone.style.aspectRatio = "1200 / 627";
+    placeholder.style.top = "73.5%";
+    placeholder.style.left = "72.25%";
+
 
 
 
@@ -52,8 +56,8 @@
             const dh = userImage.height * userImgScale;
             
             // Default center around the white area on the right
-            const imgCenterX = 850 + userImgX;
-            const imgCenterY = 171 + userImgY;
+            const imgCenterX = 867 + userImgX;
+            const imgCenterY = 461 + userImgY;
             
             ctx.drawImage(userImage, imgCenterX - dw / 2, imgCenterY - dh / 2, dw, dh);
             ctx.restore();
@@ -76,7 +80,7 @@
             const img = new Image();
             img.onload = () => {
                 userImage = img;
-                userImgScale = 280 / Math.max(img.width, img.height);
+                userImgScale = 300 / Math.max(img.width, img.height);
                 zoomSlider.value = userImgScale;
                 userImgX = 0; 
                 userImgY = 0;
