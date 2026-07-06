@@ -129,13 +129,25 @@
         e.stopPropagation();
         downloadBtn.click(); 
         
-        const shareText = `I'm attending #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n320+ Exhibitors\n100+ Speakers\nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
+        const shareText = `So excited for #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n280+ Exhibitors \n100+ Speakers \nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
+        
+        const textArea = document.getElementById('share-text-area');
+        const manualCopyBtn = document.getElementById('manual-copy-btn');
+        
+        textArea.value = shareText;
+        customModal.classList.add('active');
         
         navigator.clipboard.writeText(shareText).then(() => {
-            customModal.classList.add('active');
+            manualCopyBtn.textContent = "✓ Auto-copied to Clipboard";
         }).catch(err => {
-            window.open('https://www.linkedin.com/feed/?shareActive=true', '_blank'); 
+            manualCopyBtn.textContent = "Copy Text to Clipboard";
         });
+        
+        manualCopyBtn.onclick = () => {
+            textArea.select();
+            document.execCommand('copy');
+            manualCopyBtn.textContent = "✓ Copied!";
+        };
     };
 
     modalCloseBtn.onclick = () => {
@@ -147,7 +159,7 @@
         e.stopPropagation();
         downloadBtn.click(); 
         
-        const emailBody = `I'm attending #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n320+ Exhibitors\n100+ Speakers\nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
+        const emailBody = `So excited for #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n280+ Exhibitors \n100+ Speakers \nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
         window.location.href = `mailto:?subject=I'm attending Lubricant Expo Europe 2026!&body=${encodeURIComponent(emailBody)}`; 
     };
     
