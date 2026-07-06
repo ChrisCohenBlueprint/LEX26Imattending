@@ -186,7 +186,7 @@ canvas {
     position: absolute;
     top: 73.5%; 
     left: 72.25%;
-    transform: translate(-50%, -50%) scale(0.55);
+    transform: translate(-50%, -50%) scale(0.7);
     width: 200px;
     height: 200px;
     display: flex;
@@ -201,7 +201,7 @@ canvas {
 }
 
 .drop-zone:hover .placeholder {
-    transform: translate(-50%, -50%) scale(0.6);
+    transform: translate(-50%, -50%) scale(0.75);
 }
 
 .upload-icon {
