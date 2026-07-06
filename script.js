@@ -4,8 +4,6 @@
     const fileInput = document.getElementById('file-input');
     const zoomSlider = document.getElementById('zoom-slider');
     
-    // Text Inputs
-    const boothInput = document.getElementById('booth-input');
     
     const downloadBtn = document.getElementById('download-btn');
     const linkedinBtn = document.getElementById('linkedin-btn');
@@ -32,52 +30,9 @@
     frameImage.src = FRAME_PATH_CURRENT;
     frameImage.onload = () => render();
 
-    boothInput.oninput = () => render();
-
-    // Style Switcher Handler
-    const styleBtns = document.querySelectorAll('.style-btn');
     const dropZone = document.getElementById('drop-zone');
 
-    styleBtns.forEach(btn => {
-        btn.onclick = (e) => {
-            e.stopPropagation();
-            styleBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            currentStyle = btn.getAttribute('data-style');
-            
-            if (currentStyle === 'banner') {
-                canvas.width = 800;
-                canvas.height = 200;
-                FRAME_PATH_CURRENT = 'banner-frame.png';
-                dropZone.style.aspectRatio = "800 / 200";
-                placeholder.style.top = "53.5%";
-                placeholder.style.left = "84.5%";
-                placeholder.style.transform = "translate(-50%, -50%) scale(0.65)";
-            } else {
-                canvas.width = 1024;
-                canvas.height = 535;
-                FRAME_PATH_CURRENT = 'frame.png';
-                dropZone.style.aspectRatio = "1024 / 535";
-                placeholder.style.top = "32%";
-                placeholder.style.left = "83%";
-                placeholder.style.transform = "translate(-50%, -50%) scale(1)";
-            }
-            
-            frameImage = new Image();
-            frameImage.crossOrigin = "anonymous";
-            frameImage.src = FRAME_PATH_CURRENT;
-            frameImage.onload = () => {
-                if (userImage) {
-                    userImgScale = (currentStyle === 'banner' ? 140 : 280) / Math.max(userImage.width, userImage.height);
-                    zoomSlider.value = userImgScale;
-                    userImgX = 0;
-                    userImgY = 0;
-                }
-                render();
-            };
-        };
-    });
+
 
     function render() {
         // ALWAYS start the frame layout with a fresh structural state reset
@@ -97,8 +52,8 @@
             const dh = userImage.height * userImgScale;
             
             // Default center around the white area on the right
-            const imgCenterX = (currentStyle === 'banner' ? 675 : 850) + userImgX;
-            const imgCenterY = (currentStyle === 'banner' ? 107 : 171) + userImgY;
+            const imgCenterX = 850 + userImgX;
+            const imgCenterY = 171 + userImgY;
             
             ctx.drawImage(userImage, imgCenterX - dw / 2, imgCenterY - dh / 2, dw, dh);
             ctx.restore();
@@ -107,22 +62,6 @@
         // 3. Render Overlay Frame Template ON TOP
         if (frameImage.complete && frameImage.naturalWidth !== 0) {
             ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
-        }
-
-        // 4. Render Stand Number Text
-        const boothText = boothInput.value.trim() ? boothInput.value : "";
-        if (boothText) {
-            const fontSize = currentStyle === 'banner' ? "22px" : "34px";
-            const fontName = "'NeueHaasGrotesk', 'Inter', sans-serif";
-            
-            const textCenterX = currentStyle === 'banner' ? 529 : 702;
-            const textBaselineY = currentStyle === 'banner' ? 88 : 425; 
-
-            ctx.fillStyle = "#162842"; // Dark blue text color
-            ctx.font = `800 ${fontSize} ${fontName}`;
-            ctx.textBaseline = "middle";
-            ctx.textAlign = "center";
-            ctx.fillText(boothText, textCenterX, textBaselineY);
         }
     }
 
@@ -137,7 +76,7 @@
             const img = new Image();
             img.onload = () => {
                 userImage = img;
-                userImgScale = (currentStyle === 'banner' ? 140 : 280) / Math.max(img.width, img.height);
+                userImgScale = 280 / Math.max(img.width, img.height);
                 zoomSlider.value = userImgScale;
                 userImgX = 0; 
                 userImgY = 0;
@@ -177,7 +116,7 @@
     downloadBtn.onclick = (e) => {
         e.stopPropagation();
         const link = document.createElement('a');
-        link.download = currentStyle === 'banner' ? 'lex26-email-banner.png' : 'lex26-exhibitor-badge.png';
+        link.download = 'lex26-attendee-badge.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
     };
@@ -186,7 +125,7 @@
         e.stopPropagation();
         downloadBtn.click(); 
         
-        const shareText = `We are so excited to exhibit at #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n320+ Exhibitors\n100+ Speakers\nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
+        const shareText = `I'm attending #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n320+ Exhibitors\n100+ Speakers\nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
         
         navigator.clipboard.writeText(shareText).then(() => {
             customModal.classList.add('active');
@@ -204,8 +143,8 @@
         e.stopPropagation();
         downloadBtn.click(); 
         
-        const emailBody = `We are so excited to exhibit at #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n320+ Exhibitors\n100+ Speakers\nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
-        window.location.href = `mailto:?subject=We are exhibiting at Lubricant Expo Europe 2026!&body=${encodeURIComponent(emailBody)}`; 
+        const emailBody = `I'm attending #lubricantexpoeurope 2026 - taking place September 15 - 17 \n\nRegister for free here: https://register.visitcloud.com/survey/3dkj7ikw2zeed?actioncode=000096DOC \n\n5000+ Attendees\n320+ Exhibitors\n100+ Speakers\nAll brought to you over 3 days at Lubricant Expo Europe, Düsseldorf, Germany\n\nSee you there!`;
+        window.location.href = `mailto:?subject=I'm attending Lubricant Expo Europe 2026!&body=${encodeURIComponent(emailBody)}`; 
     };
     
     resetBtn.onclick = (e) => { e.stopPropagation(); location.reload(); };
